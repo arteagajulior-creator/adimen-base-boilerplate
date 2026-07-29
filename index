@@ -84,7 +84,7 @@
 <script>
     // CONFIGURACIÓN COMPLETA DE ADIMENTIK
     const SUPABASE_URL = 'https://lzrfvmeqfoklazljszha.supabase.co'; 
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cmZ2bWVxZm9rbGF6bGpzemhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxMDA0NDksImV4cCI6MjEwMDY3NjQ0OX0.JGKMtstrswmORTmDN9EM0K-yQ9p7RIqd_t3OY-1oc6A';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkcm95Ympid3Z1Z3JzeHB0dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxOTAzMTUsImV4cCI6MjEwMDc2NjMxNX0.MUyGr7X1VFwpEmQL3ZQjwSbzyX67pa46uz8BuVtwHAQ';
     const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/ll223srq2jqlvxqx85kgw9hxsb8omlak';
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
