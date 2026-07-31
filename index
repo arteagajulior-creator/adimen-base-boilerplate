@@ -6,99 +6,60 @@
     <title>Contacto | AdimenTIK</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root {
-            --primary: #0052cc;
-            --bg: #f4f7f6;
-            --text: #333;
-            --card-bg: #ffffff;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 450px;
-        }
+        :root { --primary: #0052cc; --bg: #f4f7f6; --text: #333; --card-bg: #ffffff; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: var(--card-bg); padding: 2.5rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); width: 100%; max-width: 450px; }
         h2 { margin-top: 0; color: var(--primary); text-align: center; font-size: 1.8rem; }
         .subtitle { text-align: center; color: #666; margin-bottom: 1.5rem; font-size: 0.95rem; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
-        input, textarea {
-            width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;
-            font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s;
-        }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        button {
-            width: 100%; padding: 1rem; background-color: var(--primary); color: white;
-            border: none; border-radius: 6px; font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: background-color 0.3s;
-        }
-        button:hover { background-color: #003d99; }
+        input, textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+        button { width: 100%; padding: 1rem; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
         button:disabled { background-color: #ccc; cursor: not-allowed; }
-        .message { margin-top: 1rem; padding: 1rem; border-radius: 6px; text-align: center; display: none; }
-        .success { background-color: #d4edda; color: #155724; }
-        .error { background-color: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>AdimenTIK</h2>
-    <p class="subtitle">Inteligencia Artificial aplicada a tu negocio desde Bilbao.</p>
+    <p class="subtitle">Modo Diagnóstico Activo</p>
     
     <form id="leadForm">
         <div class="form-group">
-            <label for="nombre">Nombre completo *</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <label>Nombre *</label>
+            <input type="text" id="nombre" required>
         </div>
         <div class="form-group">
-            <label for="email">Correo electrónico *</label>
-            <input type="email" id="email" name="email" required>
+            <label>Email *</label>
+            <input type="email" id="email" required>
         </div>
         <div class="form-group">
-            <label for="empresa">Empresa</label>
-            <input type="text" id="empresa" name="empresa">
+            <label>Empresa</label>
+            <input type="text" id="empresa">
         </div>
         <div class="form-group">
-            <label for="mensaje">¿En qué podemos ayudarte?</label>
-            <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+            <label>Mensaje</label>
+            <textarea id="mensaje" rows="3"></textarea>
         </div>
-        <button type="submit" id="submitBtn">Enviar consulta</button>
+        <button type="submit" id="submitBtn">ENVIAR PRUEBA</button>
     </form>
-    
-    <div id="statusMessage" class="message"></div>
 </div>
 
 <script>
-    // CONFIGURACIÓN COMPLETA Y VERIFICADA DE ADIMENTIK
     const SUPABASE_URL = 'https://ddroybjbwvugrsxptuii.supabase.co'; 
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkcm95Ympid3Z1Z3JzeHB0dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxOTAzMTUsImV4cCI6MjEwMDc2NjMxNX0.MUyGr7X1VFwpEmQL3ZQjwSbzyX67pa46uz8BuVtwHAQ';
     const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/ll223srq2jqlvxqx85kgw9hxsb8omlak';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById('leadForm');
     const submitBtn = document.getElementById('submitBtn');
-    const statusMessage = document.getElementById('statusMessage');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Procesando...';
-        statusMessage.style.display = 'none';
+        submitBtn.textContent = 'Conectando...';
 
-        const formData = {
+        const datos = {
             nombre: document.getElementById('nombre').value,
             email: document.getElementById('email').value,
             empresa: document.getElementById('empresa').value,
@@ -106,30 +67,34 @@
         };
 
         try {
-            // 1. Guardar en Supabase
-            const { error: dbError } = await supabase.from('leads').insert([formData]);
-            if (dbError) throw dbError;
+            // INTENTO DE GUARDADO EN SUPABASE
+            const { data, error } = await db.from('leads').insert([datos]).select();
+            
+            if (error) {
+                // ¡AQUÍ ESTÁ LA CLAVE! Esto te dirá exactamente qué falla
+                throw new Error("SUPABASE DICE: " + error.message);
+            }
 
-            // 2. Enviar a Make.com (Automatización de correo)
-            await fetch(MAKE_WEBHOOK_URL, {
+            // SI LLEGA AQUÍ, SUPABASE FUNCIONA. PROBAMOS MAKE
+            const respuestaMake = await fetch(MAKE_WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(datos)
             });
 
-            statusMessage.textContent = '¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.';
-            statusMessage.className = 'message success';
-            statusMessage.style.display = 'block';
+            if (!respuestaMake.ok) {
+                throw new Error("MAKE.COM RECHAZÓ LA CONEXIÓN (Código: " + respuestaMake.status + ")");
+            }
+
+            alert("¡ÉXITO TOTAL!\n\n1. Datos guardados en Supabase.\n2. Webhook enviado a Make.com.\n\nRevisa tu correo.");
             form.reset();
 
-        } catch (error) {
-            console.error('Error:', error);
-            statusMessage.textContent = 'Hubo un error al enviar el formulario. Por favor, inténtalo de nuevo.';
-            statusMessage.className = 'message error';
-            statusMessage.style.display = 'block';
+        } catch (err) {
+            // Esta ventana emergente nos dará la respuesta definitiva
+            alert("ERROR DETECTADO:\n\n" + err.message + "\n\nPor favor, copia este mensaje y envíaselo al Agente QA.");
         } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Enviar consulta';
+            submitBtn.textContent = 'ENVIAR PRUEBA';
         }
     });
 </script>
