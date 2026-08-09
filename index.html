@@ -3,98 +3,532 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto | AdimenTIK</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="description" content="AdimenTIK - Consultoría de Inteligencia Artificial para pymes en Bilbao. Automatización, chatbots IA y CRM inteligentes.">
+    <meta name="keywords" content="inteligencia artificial, Bilbao, pymes, automatización, chatbot, CRM, IA">
+    <title>AdimenTIK | Inteligencia Artificial para Pymes en Bilbao</title>
     <style>
-        :root { --primary: #0052cc; --bg: #f4f7f6; --text: #333; --card-bg: #ffffff; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; marg[...] 
-        .container { background: var(--card-bg); padding: 2.5rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); width: 100%; max-width: 450px; }
-        h2 { margin-top: 0; color: var(--primary); text-align: center; font-size: 1.8rem; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 1.5rem; font-size: 0.95rem; }
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
-        input, textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
-        button { width: 100%; padding: 1rem; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        :root {
+            --primary: #0052cc;
+            --primary-dark: #003d99;
+            --primary-light: #e8f0fe;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --gray-900: #111827;
+            --gray-700: #374151;
+            --gray-500: #6b7280;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: var(--gray-900); line-height: 1.6; overflow-x: hidden; }
+        
+        /* NAVBAR */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--dark); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--gray-700); text-decoration: none; font-weight: 500; transition: color 0.2s; font-size: 0.95rem; }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta { background: var(--primary); color: white !important; padding: 0.6rem 1.5rem; border-radius: 8px; }
+        .nav-cta:hover { background: var(--primary-dark); }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--dark); }
+        
+        /* HERO */
+        .hero { min-height: 100vh; display: flex; align-items: center; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0052cc 100%); color: white; padding: 6rem 2rem 4rem; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(16,185,129,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59,130,246,0.2) 0%, transparent 50%); }
+        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; }
+        .hero-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; margin-bottom: 1.5rem; backdrop-filter: blur(10px); }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        .hero h1 .highlight { background: linear-gradient(135deg, #10b981, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem; max-width: 500px; }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn { padding: 0.9rem 2rem; border-radius: 10px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s; border: none; cursor: pointer; font-size: 1rem; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16,185,129,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+        .hero-visual { position: relative; }
+        .hero-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .hero-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .hero-card-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ef4444; } .dot-yellow { background: #f59e0b; } .dot-green { background: #10b981; }
+        .hero-stat { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .hero-stat:last-child { border-bottom: none; }
+        .hero-stat-label { opacity: 0.7; font-size: 0.9rem; }
+        .hero-stat-value { font-weight: 700; font-size: 1.1rem; }
+        .hero-float { position: absolute; background: rgba(255,255,255,0.95); color: var(--dark); padding: 1rem 1.5rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-size: 0.9rem; font-weight: 600; }
+        .float-1 { top: -20px; right: -20px; animation: float 3s ease-in-out infinite; }
+        .float-2 { bottom: -20px; left: -20px; animation: float 3s ease-in-out infinite 1.5s; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        /* SECTIONS */
+        section { padding: 5rem 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-tag { display: inline-block; color: var(--primary); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+        .section-title { font-size: 2.5rem; font-weight: 800; color: var(--dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .section-subtitle { font-size: 1.1rem; color: var(--gray-500); max-width: 600px; margin: 0 auto; }
+        
+        /* SERVICIOS */
+        .servicios { background: var(--gray-100); }
+        .servicios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .servicio-card { background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow); transition: all 0.3s; border: 1px solid transparent; }
+        .servicio-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
+        .servicio-icon { width: 60px; height: 60px; background: var(--primary-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 1.5rem; }
+        .servicio-card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; color: var(--dark); }
+        .servicio-card p { color: var(--gray-500); margin-bottom: 1rem; font-size: 0.95rem; }
+        .servicio-precio { color: var(--primary); font-weight: 700; font-size: 1.1rem; }
+        
+        /* POR QUÉ */
+        .porque-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .porque-item { text-align: center; padding: 2rem; }
+        .porque-number { font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+        .porque-item h4 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--dark); }
+        .porque-item p { color: var(--gray-500); font-size: 0.95rem; }
+        
+        /* PROCESO */
+        .proceso { background: var(--dark); color: white; }
+        .proceso .section-title { color: white; }
+        .proceso .section-subtitle { color: rgba(255,255,255,0.7); }
+        .proceso-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .proceso-step { background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); position: relative; transition: all 0.3s; }
+        .proceso-step:hover { background: rgba(255,255,255,0.08); transform: translateY(-5px); }
+        .proceso-num { position: absolute; top: -20px; left: 2rem; background: var(--accent); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; }
+        .proceso-step h4 { margin-top: 1rem; margin-bottom: 0.75rem; font-size: 1.2rem; }
+        .proceso-step p { opacity: 0.8; font-size: 0.95rem; }
+        
+        /* SECTORES */
+        .sectores-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+        .sector-card { background: white; padding: 1.5rem; border-radius: 12px; text-align: center; box-shadow: var(--shadow); transition: all 0.3s; border: 2px solid transparent; }
+        .sector-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .sector-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .sector-card h4 { color: var(--dark); font-size: 1rem; }
+        
+        /* FAQ */
+        .faq { background: var(--gray-100); }
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: white; margin-bottom: 1rem; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+        .faq-question { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: var(--dark); transition: background 0.2s; }
+        .faq-question:hover { background: var(--gray-100); }
+        .faq-answer { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: all 0.3s; color: var(--gray-500); }
+        .faq-item.active .faq-answer { padding: 0 1.5rem 1.5rem; max-height: 200px; }
+        .faq-toggle { font-size: 1.5rem; color: var(--primary); transition: transform 0.3s; }
+        .faq-item.active .faq-toggle { transform: rotate(45deg); }
+        
+        /* CTA FINAL */
+        .cta-final { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; text-align: center; }
+        .cta-final h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .cta-final p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        /* CONTACTO */
+        .contacto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+        .contacto-info h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--dark); }
+        .contacto-info p { color: var(--gray-500); margin-bottom: 2rem; }
+        .contacto-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; color: var(--gray-700); }
+        .contacto-item-icon { width: 40px; height: 40px; background: var(--primary-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .contacto-form { background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow-lg); }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--gray-700); font-size: 0.9rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .btn-submit { width: 100%; background: var(--primary); color: white; padding: 1rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: var(--primary-dark); }
+        .btn-submit:disabled { background: var(--gray-300); cursor: not-allowed; }
+        .form-message { margin-top: 1rem; padding: 1rem; border-radius: 8px; text-align: center; display: none; }
+        .form-message.exito { background: #d1fae5; color: #065f46; display: block; }
+        .form-message.error { background: #fee2e2; color: #991b1b; display: block; }
+        
+        /* FOOTER */
+        footer { background: var(--dark); color: white; padding: 3rem 2rem 1.5rem; }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2rem; }
+        .footer-brand .logo { color: white; font-size: 1.5rem; display: inline-block; margin-bottom: 1rem; }
+        .footer-brand p { opacity: 0.7; font-size: 0.9rem; line-height: 1.6; }
+        .footer-col h4 { margin-bottom: 1rem; font-size: 1rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.5rem; }
+        .footer-col a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .footer-col a:hover { color: white; }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; opacity: 0.6; font-size: 0.85rem; }
+        
+        /* ANIMACIONES */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { margin: 0 auto 2rem; }
+            .hero-buttons { justify-content: center; }
+            .hero-visual { display: none; }
+            .contacto-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 1rem; box-shadow: var(--shadow); }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            .section-title { font-size: 2rem; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>AdimenTIK</h2>
-    <p class="subtitle">Modo Diagnóstico Activo</p>
-    
-    <form id="leadForm">
-        <div class="form-group">
-            <label>Nombre *</label>
-            <input type="text" id="nombre" required>
-        </div>
-        <div class="form-group">
-            <label>Email *</label>
-            <input type="email" id="email" required>
-        </div>
-        <div class="form-group">
-            <label>Empresa</label>
-            <input type="text" id="empresa">
-        </div>
-        <div class="form-group">
-            <label>Mensaje</label>
-            <textarea id="mensaje" rows="3"></textarea>
-        </div>
-        <button type="submit" id="submitBtn">ENVIAR PRUEBA</button>
-    </form>
-</div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">Adimen<span>TIK</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#proceso">Proceso</a></li>
+            <li><a href="#sectores">Sectores</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contacto" class="nav-cta">Contactar</a></li>
+        </ul>
+        <button class="menu-toggle" onclick="document.getElementById('navLinks').classList.toggle('active')">☰</button>
+    </div>
+</nav>
 
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-container">
+        <div>
+            <div class="hero-badge">🚀 Consultoría IA desde Bilbao</div>
+            <h1>Inteligencia Artificial <span class="highlight">que vende</span> por ti</h1>
+            <p>Automatizamos tus procesos, capturamos leads 24/7 y convertimos tu web en una máquina de ventas. Sin tecnicismos, solo resultados.</p>
+            <div class="hero-buttons">
+                <a href="#contacto" class="btn btn-primary">Solicitar demo gratuita →</a>
+                <a href="#servicios" class="btn btn-secondary">Ver servicios</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-card">
+                <div class="hero-card-header">
+                    <div class="hero-card-dot dot-red"></div>
+                    <div class="hero-card-dot dot-yellow"></div>
+                    <div class="hero-card-dot dot-green"></div>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">Leads este mes</span>
+                    <span class="hero-stat-value">+247</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">Tasa de conversión</span>
+                    <span class="hero-stat-value">34%</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">Horas ahorradas</span>
+                    <span class="hero-stat-value">120h</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">ROI medio cliente</span>
+                    <span class="hero-stat-value">+380%</span>
+                </div>
+            </div>
+            <div class="hero-float float-1">⚡ Lead capturado</div>
+            <div class="hero-float float-2">📧 Email enviado</div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="servicios" id="servicios">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">Nuestros servicios</div>
+            <h2 class="section-title">Soluciones IA listas para usar</h2>
+            <p class="section-subtitle">Pack completos implantados en días, no en meses. Precio cerrado, sin sorpresas.</p>
+        </div>
+        <div class="servicios-grid">
+            <div class="servicio-card fade-in">
+                <div class="servicio-icon"></div>
+                <h3>CRM Inteligente</h3>
+                <p>Formulario web + base de datos + panel admin + dashboard en tiempo real. Todo conectado y funcionando.</p>
+                <div class="servicio-precio">Desde 1.200€</div>
+            </div>
+            <div class="servicio-card fade-in">
+                <div class="servicio-icon">🤖</div>
+                <h3>Chatbot IA 24/7</h3>
+                <p>Agente conversacional que responde dudas, califica leads y agenda reuniones automáticamente.</p>
+                <div class="servicio-precio">Desde 2.500€</div>
+            </div>
+            <div class="servicio-card fade-in">
+                <div class="servicio-icon">📧</div>
+                <h3>Email Marketing IA</h3>
+                <p>Secuencias automáticas personalizadas. Cada lead recibe el mensaje correcto en el momento justo.</p>
+                <div class="servicio-precio">Desde 800€</div>
+            </div>
+            <div class="servicio-card fade-in">
+                <div class="servicio-icon">📱</div>
+                <h3>App Móvil PWA</h3>
+                <p>Tu CRM convertido en app instalable. Gestiona tu negocio desde el móvil, incluso sin conexión.</p>
+                <div class="servicio-precio">Desde 1.500€</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- POR QUÉ -->
+<section>
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">Por qué AdimenTIK</div>
+            <h2 class="section-title">Resultados, no promesas</h2>
+            <p class="section-subtitle">Somos consultores técnicos, no vendedores de humo. Esto es lo que nos diferencia.</p>
+        </div>
+        <div class="porque-grid">
+            <div class="porque-item fade-in">
+                <div class="porque-number">100%</div>
+                <h4>Stack gratuito</h4>
+                <p>Supabase, Make.com, Vercel. Cero costes de licencias, 100% margen para ti.</p>
+            </div>
+            <div class="porque-item fade-in">
+                <div class="porque-number">7d</div>
+                <h4>Implantación rápida</h4>
+                <p>De la reunión inicial al sistema funcionando en menos de una semana.</p>
+            </div>
+            <div class="porque-item fade-in">
+                <div class="porque-number">0€</div>
+                <h4>Mantenimiento base</h4>
+                <p>Sin cuotas mensuales obligatorias. Solo pagas si quieres funcionalidades extra.</p>
+            </div>
+            <div class="porque-item fade-in">
+                <div class="porque-number">BIO</div>
+                <h4>Desde Bilbao</h4>
+                <p>Conocemos el tejido empresarial vasco. Hablamos tu idioma, entendemos tu negocio.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROCESO -->
+<section class="proceso" id="proceso">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag" style="color: #10b981;">Cómo trabajamos</div>
+            <h2 class="section-title">4 pasos, sin complicaciones</h2>
+            <p class="section-subtitle">Proceso probado con más de 20 pymes vascas.</p>
+        </div>
+        <div class="proceso-grid">
+            <div class="proceso-step fade-in">
+                <div class="proceso-num">1</div>
+                <h4>Diagnóstico</h4>
+                <p>Reunión gratuita de 30 min para entender tu negocio y detectar oportunidades de automatización.</p>
+            </div>
+            <div class="proceso-step fade-in">
+                <div class="proceso-num">2</div>
+                <h4>Propuesta</h4>
+                <p>Te enviamos un presupuesto cerrado con alcance, plazos y precio. Sin letra pequeña.</p>
+            </div>
+            <div class="proceso-step fade-in">
+                <div class="proceso-num">3</div>
+                <h4>Implantación</h4>
+                <p>Desarrollamos y configuramos todo. Tú solo tienes que validar y aprobar.</p>
+            </div>
+            <div class="proceso-step fade-in">
+                <div class="proceso-num">4</div>
+                <h4>Formación</h4>
+                <p>Te enseñamos a usarlo en 1 hora. Documentación incluida. Soporte post-lanzamiento.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTORES -->
+<section id="sectores">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">Sectores</div>
+            <h2 class="section-title">Experiencia en tu industria</h2>
+            <p class="section-subtitle">Hemos trabajado con pymes de estos sectores en el País Vasco.</p>
+        </div>
+        <div class="sectores-grid">
+            <div class="sector-card fade-in"><div class="sector-icon"></div><h4>Industria</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">🍽️</div><h4>Hostelería</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">🏥</div><h4>Salud</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">⚖️</div><h4>Legal</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">🎓</div><h4>Educación</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">🛒</div><h4>Retail</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">🏗️</div><h4>Construcción</h4></div>
+            <div class="sector-card fade-in"><div class="sector-icon">💼</div><h4>Servicios B2B</h4></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">FAQ</div>
+            <h2 class="section-title">Preguntas frecuentes</h2>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item fade-in">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>¿Necesito conocimientos técnicos?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">No. Nosotros nos encargamos de todo lo técnico. Tú solo tienes que usar el panel que te entregamos, tan fácil como usar Gmail.</div>
+            </div>
+            <div class="faq-item fade-in">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>¿Cuánto cuesta el mantenimiento mensual?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">El sistema base no tiene coste mensual (usamos herramientas gratuitas). Solo pagas si quieres funcionalidades premium como chatbot IA avanzado o monitor de competencia.</div>
+            </div>
+            <div class="faq-item fade-in">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>¿En cuánto tiempo está funcionando?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">Un CRM básico está operativo en 3-5 días. Proyectos con chatbot IA o integraciones complejas, entre 2-3 semanas.</div>
+            </div>
+            <div class="faq-item fade-in">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>¿Puedo ver una demo antes de contratar?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">Sí. Te mostramos el sistema en vivo con datos de ejemplo. Sin compromiso. Agenda tu demo gratuita en el formulario de abajo.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+    <div class="container fade-in">
+        <h2>¿Listo para automatizar tu negocio?</h2>
+        <p>Agenda una demo gratuita de 30 minutos. Te enseñamos cómo la IA puede multiplicar tus ventas.</p>
+        <a href="#contacto" class="btn btn-primary" style="background: white; color: var(--primary);">Reservar demo gratuita →</a>
+    </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+    <div class="container">
+        <div class="contacto-grid">
+            <div class="contacto-info fade-in">
+                <div class="section-tag">Contacto</div>
+                <h3>Hablemos de tu proyecto</h3>
+                <p>Rellena el formulario y te contactamos en menos de 24h laborables. Primera consulta gratuita.</p>
+                <div class="contacto-item">
+                    <div class="contacto-item-icon">📍</div>
+                    <span>Bilbao, País Vasco</span>
+                </div>
+                <div class="contacto-item">
+                    <div class="contacto-item-icon">📧</div>
+                    <span>artegajulior@gmail.com</span>
+                </div>
+                <div class="contacto-item">
+                    <div class="contacto-item-icon">⏰</div>
+                    <span>Respuesta en menos de 24h</span>
+                </div>
+            </div>
+            <div class="contacto-form fade-in">
+                <form id="leadForm">
+                    <div class="form-group"><label>Nombre *</label><input type="text" id="nombre" required></div>
+                    <div class="form-group"><label>Email *</label><input type="email" id="email" required></div>
+                    <div class="form-group"><label>Teléfono</label><input type="tel" id="telefono" placeholder="+34 600 000 000"></div>
+                    <div class="form-group"><label>Empresa</label><input type="text" id="empresa"></div>
+                    <div class="form-group"><label>¿En qué podemos ayudarte?</label><textarea id="mensaje" rows="4"></textarea></div>
+                    <button type="submit" id="submitBtn" class="btn-submit">Enviar mensaje</button>
+                    <div id="formMessage" class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="logo">Adimen<span style="color: #10b981;">TIK</span></a>
+            <p>Consultoría de Inteligencia Artificial para pymes vascas. Automatización, chatbots y CRM inteligentes desde Bilbao.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Servicios</h4>
+            <ul>
+                <li><a href="#servicios">CRM Inteligente</a></li>
+                <li><a href="#servicios">Chatbot IA</a></li>
+                <li><a href="#servicios">Email Marketing</a></li>
+                <li><a href="#servicios">App Móvil</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Empresa</h4>
+            <ul>
+                <li><a href="#proceso">Proceso</a></li>
+                <li><a href="#sectores">Sectores</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="#">Aviso legal</a></li>
+                <li><a href="#">Privacidad</a></li>
+                <li><a href="#">Cookies</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2026 AdimenTIK. Todos los derechos reservados. Hecho con ❤️ en Bilbao.
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const SUPABASE_URL = 'https://ddroybjbwvugrsxptuii.supabase.co'; 
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkcm95Ympid3Z1Z3JzeHB0dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxOTAzMTUsImV4cCI6MjEwMDc2NjMxNX0.[...]'
-    const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/ll223srq2jqlvxqx85kgw9hxsb8omlak';
-
-    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Animaciones al hacer scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    
+    // Formulario de contacto
+    const client = window.supabase.createClient('https://ddroybjbwvugrsxptuii.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkcm95Ympid3Z1Z3JzeHB0dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxOTAzMTUsImV4cCI6MjEwMDc2NjMxNX0.MUyGr7X1VFwpEmQL3ZQjwSbzyX67pa46uz8BuVtwHAQ');
+    const MAKE_WEBHOOK = 'https://hook.eu1.make.com/ll223srq2jqlvxqx85kgw9hxsb8omlak';
     const form = document.getElementById('leadForm');
-    const submitBtn = document.getElementById('submitBtn');
-
+    const btn = document.getElementById('submitBtn');
+    const msg = document.getElementById('formMessage');
+    
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Conectando...';
-
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+        msg.style.display = 'none';
+        
         const datos = {
             nombre: document.getElementById('nombre').value,
             email: document.getElementById('email').value,
+            telefono: document.getElementById('telefono').value,
             empresa: document.getElementById('empresa').value,
-            mensaje: document.getElementById('mensaje').value
+            mensaje: document.getElementById('mensaje').value,
+            estado: 'nuevo'
         };
-
+        
         try {
-            // INTENTO DE GUARDADO EN SUPABASE
-            const { data, error } = await db.from('leads').insert([datos]).select();
-            
-            if (error) {
-                // ¡AQUÍ ESTÁ LA CLAVE! Esto te dirá exactamente qué falla
-                throw new Error("SUPABASE DICE: " + error.message);
-            }
-
-            // SI LLEGA AQUÍ, SUPABASE FUNCIONA. PROBAMOS MAKE
-            const respuestaMake = await fetch(MAKE_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datos)
-            });
-
-            if (!respuestaMake.ok) {
-                throw new Error("MAKE.COM RECHAZÓ LA CONEXIÓN (Código: " + respuestaMake.status + ")");
-            }
-
-            alert("¡ÉXITO TOTAL!\n\n1. Datos guardados en Supabase.\n2. Webhook enviado a Make.com.\n\nRevisa tu correo.");
+            const { error } = await client.from('leads').insert([datos]);
+            if (error) throw new Error(error.message);
+            await fetch(MAKE_WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(datos) });
+            msg.textContent = '✅ ¡Mensaje enviado! Te contactamos en menos de 24h.';
+            msg.className = 'form-message exito';
             form.reset();
-
         } catch (err) {
-            // Esta ventana emergente nos dará la respuesta definitiva
-            alert("ERROR DETECTADO:\n\n" + err.message + "\n\nPor favor, copia este mensaje y envíaselo al Agente QA.");
+            msg.textContent = '❌ Error: ' + err.message;
+            msg.className = 'form-message error';
         } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'ENVIAR PRUEBA';
+            btn.disabled = false;
+            btn.textContent = 'Enviar mensaje';
         }
     });
 </script>
