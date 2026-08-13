@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Clientes | AdimenTIK</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-container { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 450px; padding: 2.5rem; }
+        .logo { text-align: center; margin-bottom: 2rem; }
+        .logo h1 { color: #0052cc; font-size: 2rem; font-weight: 800; }
+        .logo p { color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid #e5e7eb; }
+        .tab { flex: 1; padding: 0.75rem; text-align: center; cursor: pointer; font-weight: 600; color: #6b7280; transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+        .tab.active { color: #0052cc; border-bottom-color: #0052cc; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; }
+        .form-group input:focus { outline: none; border-color: #0052cc; box-shadow: 0 0 0 3px rgba(0,82,204,0.1); }
+        .btn { width: 100%; padding: 0.9rem; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+        .btn:hover { background: #003d99; }
+        .btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .message { margin-top: 1rem; padding: 0.75rem; border-radius: 8px; text-align: center; display: none; font-size: 0.9rem; }
+        .message.error { background: #fee2e2; color: #991b1b; display: block; }
+        .message.success { background: #d1fae5; color: #065f46; display: block; }
+        .back-link { text-align: center; margin-top: 1.5rem; }
+        .back-link a { color: #0052cc; text-decoration: none; font-size: 0.9rem; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Adimen<span style="color: #10b981;">TIK</span></h1>
+            <p>Acceso seguro para clientes</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" id="tabLogin" onclick="cambiarTab('login')">Iniciar Sesión</div>
+            <div class="tab" id="tabRegistro" onclick="cambiarTab('registro')">Registrarse</div>
+        </div>
+
+        <!-- Formulario de Login -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" required placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="loginPassword" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn" id="loginBtn">Entrar</button>
+            <div id="loginMessage" class="message"></div>
+        </form>
+
+        <!-- Formulario de Registro -->
+        <form id="registroForm" class="hidden">
+            <div class="form-group">
+                <label>Nombre completo *</label>
+                <input type="text" id="regNombre" required placeholder="Tu nombre">
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="regEmail" required placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Empresa</label>
+                <input type="text" id="regEmpresa" placeholder="Nombre de tu empresa">
+            </div>
+            <div class="form-group">
+                <label>Contraseña *</label>
+                <input type="password" id="regPassword" required placeholder="Mínimo 6 caracteres" minlength="6">
+            </div>
+            <button type="submit" class="btn" id="registroBtn">Crear cuenta</button>
+            <div id="registroMessage" class="message"></div>
+        </form>
+
+        <div class="back-link">
+            <a href="index.html">← Volver a la web principal</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const client = window.supabase.createClient(
+            'https://ddroybjbwvugrsxptuii.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkcm95Ympid3Z1Z3JzeHB0dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxOTAzMTUsImV4cCI6MjEwMDc2NjMxNX0.MUyGr7X1VFwpEmQL3ZQjwSbzyX67pa46uz8BuVtwHAQ'
+        );
+
+        function cambiarTab(tab) {
+            document.getElementById('loginMessage').style.display = 'none';
+            document.getElementById('registroMessage').style.display = 'none';
+            
+            if (tab === 'login') {
+                document.getElementById('tabLogin').classList.add('active');
+                document.getElementById('tabRegistro').classList.remove('active');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registroForm').classList.add('hidden');
+            } else {
+                document.getElementById('tabRegistro').classList.add('active');
+                document.getElementById('tabLogin').classList.remove('active');
+                document.getElementById('registroForm').classList.remove('hidden');
+                document.getElementById('loginForm').classList.add('hidden');
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const msg = document.getElementById('loginMessage');
+            
+            btn.disabled = true;
+            btn.textContent = 'Entrando...';
+            msg.style.display = 'none';
+
+            const { data, error } = await client.auth.signInWithPassword({
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            });
+
+            if (error) {
+                msg.textContent = '❌ ' + error.message;
+                msg.className = 'message error';
+            } else {
+                msg.textContent = '✅ Acceso correcto. Redirigiendo...';
+                msg.className = 'message success';
+                setTimeout(() => { window.location.href = 'cliente.html'; }, 1000);
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Entrar';
+        });
+
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('registroBtn');
+            const msg = document.getElementById('registroMessage');
+            
+            btn.disabled = true;
+            btn.textContent = 'Creando cuenta...';
+            msg.style.display = 'none';
+
+            const { data, error } = await client.auth.signUp({
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                options: {
+                    data: {
+                        nombre: document.getElementById('regNombre').value,
+                        empresa: document.getElementById('regEmpresa').value
+                    }
+                }
+            });
+
+            if (error) {
+                msg.textContent = '❌ ' + error.message;
+                msg.className = 'message error';
+            } else {
+                msg.textContent = '✅ Cuenta creada. Revisa tu email para confirmar el acceso.';
+                msg.className = 'message success';
+                document.getElementById('registroForm').reset();
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Crear cuenta';
+        });
+
+        client.auth.getSession().then(({ data: { session } }) => {
+            if (session) { window.location.href = 'cliente.html'; }
+        });
+    </script>
+</body>
+</html>
